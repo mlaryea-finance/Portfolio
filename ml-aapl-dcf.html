@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Apple Inc. DCF Valuation | Mariama Laryea</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #F9F5EE;
+    --mid: #2C3E50;
+    --gray: #888;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--navy); color: var(--cream); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 80px;
+    position: relative;
+    z-index:2;
+  }
+  .tag {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 6px 16px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    width: fit-content;
+  }
+  .hero-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .hero-left h1 span { color: var(--gold); }
+  .hero-left p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #aaa;
+    max-width: 420px;
+    margin-bottom: 40px;
+  }
+  .meta-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  .meta-item label { display: block; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
+  .meta-item span { font-size: 15px; color: var(--cream); }
+  .author-badge {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding-top: 32px;
+  }
+  .author-badge .initials {
+    width: 44px; height: 44px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: var(--navy);
+  }
+  .author-badge .info small { display:block; color: var(--gray); font-size:12px; }
+
+  /* HERO RIGHT — chart panel */
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px 60px 40px;
+    position: relative;
+    z-index:2;
+  }
+  .valuation-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .valuation-card h3 { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); margin-bottom:28px; letter-spacing:1px; }
+  .val-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .val-row:last-child { border-bottom: none; }
+  .val-row .label { font-size: 13px; color: #888; }
+  .val-row .value { font-size: 16px; font-weight: 500; }
+  .val-row .value.gold { color: var(--gold); font-family:'Playfair Display',serif; font-size:20px; }
+  .val-row .value.green { color: #4CAF50; }
+  .val-row .value.cream { color: var(--cream); }
+  .buy-badge {
+    margin-top: 28px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--gold);
+    text-align: center;
+    padding: 14px;
+    letter-spacing: 3px;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  /* SECTION */
+  section { padding: 100px 80px; }
+  section h2 {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(28px, 3vw, 40px);
+    margin-bottom: 60px;
+    position: relative;
+    display: inline-block;
+  }
+  section h2::after {
+    content:'';
+    position:absolute;
+    bottom:-12px; left:0;
+    width:60px; height:3px;
+    background: var(--gold);
+  }
+
+  /* ASSUMPTIONS GRID */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .assumption-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 28px;
+    transition: border-color 0.3s;
+  }
+  .assumption-card:hover { border-color: var(--gold); }
+  .assumption-card .num { font-family:'Playfair Display',serif; font-size:36px; color:var(--gold); margin-bottom:8px; }
+  .assumption-card .title { font-size:13px; letter-spacing:1px; color:#888; margin-bottom:6px; text-transform:uppercase; }
+  .assumption-card p { font-size:14px; color:#aaa; line-height:1.6; }
+
+  /* SCENARIO TABLE */
+  .scenario-wrap { overflow-x:auto; margin-top:20px; }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background: rgba(201,168,76,0.1); }
+  th { padding:16px 20px; text-align:left; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:500; }
+  td { padding:16px 20px; font-size:14px; color:#ccc; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .highlight td { color: var(--cream); font-weight:500; }
+  .tag-bull { background:rgba(76,175,80,0.15); color:#4CAF50; padding:3px 10px; border-radius:2px; font-size:12px; }
+  .tag-base { background:rgba(201,168,76,0.15); color:var(--gold); padding:3px 10px; border-radius:2px; font-size:12px; }
+  .tag-bear { background:rgba(244,67,54,0.15); color:#F44336; padding:3px 10px; border-radius:2px; font-size:12px; }
+
+  /* KPI COMPARISON */
+  .kpi-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; }
+  .kpi-card { padding:24px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); text-align:center; }
+  .kpi-card .metric { font-family:'Playfair Display',serif; font-size:28px; color:var(--gold); }
+  .kpi-card .metric-label { font-size:12px; color:#888; margin-top:6px; letter-spacing:1px; text-transform:uppercase; }
+  .kpi-card .companies { font-size:11px; color:#666; margin-top:10px; }
+
+  /* METHODOLOGY */
+  .method-grid { display:grid; grid-template-columns: 1fr 1fr; gap:32px; }
+  .method-step { display:flex; gap:20px; }
+  .step-num {
+    width:36px; height:36px; min-width:36px;
+    border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; color:var(--gold); font-size:14px;
+  }
+  .method-step h4 { font-size:15px; margin-bottom:8px; color:var(--cream); }
+  .method-step p { font-size:13px; color:#888; line-height:1.6; }
+
+  /* SEGMENT BAR */
+  .segment-bars { display:flex; flex-direction:column; gap:16px; margin-top:20px; }
+  .seg-row { display:flex; align-items:center; gap:16px; }
+  .seg-label { width:120px; font-size:13px; color:#aaa; flex-shrink:0; }
+  .seg-bar-wrap { flex:1; background:rgba(255,255,255,0.06); height:12px; border-radius:2px; overflow:hidden; }
+  .seg-bar { height:100%; background:linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius:2px; }
+  .seg-pct { width:50px; font-size:13px; color:var(--gold); text-align:right; flex-shrink:0; }
+  .seg-margin { width:80px; font-size:13px; color:#4CAF50; text-align:right; flex-shrink:0; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 40px 80px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  footer p { font-size:13px; color:#666; }
+  footer a { color:var(--gold); text-decoration:none; font-size:13px; }
+
+  /* DIVIDER */
+  .divider { width:60px; height:1px; background:var(--gold); margin:0 auto 60px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+  .hero-left > * { animation: fadeUp 0.7s ease both; }
+  .hero-left > *:nth-child(1) { animation-delay:0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay:0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay:0.3s; }
+  .hero-left > *:nth-child(4) { animation-delay:0.4s; }
+  .hero-left > *:nth-child(5) { animation-delay:0.5s; }
+  .hero-right { animation: fadeUp 0.9s 0.4s ease both; }
+
+  @media(max-width:900px) {
+    .hero { grid-template-columns:1fr; }
+    .hero-left { padding:60px 32px; }
+    .hero-right { padding:0 32px 60px; }
+    section { padding:60px 32px; }
+    .grid-3, .kpi-grid { grid-template-columns:1fr 1fr; }
+    .method-grid { grid-template-columns:1fr; }
+    footer { flex-direction:column; gap:12px; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="tag">Financial Modeling Portfolio</div>
+    <h1>Apple Inc.<br/><span>DCF Valuation</span><br/>Analysis</h1>
+    <p>A comprehensive 3-statement DCF model and investment thesis for Apple Inc. (NASDAQ: AAPL), built from 10-K SEC filings across FY2019–FY2024 with full scenario and sensitivity analysis.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <label>Ticker</label>
+        <span>AAPL — NASDAQ</span>
+      </div>
+      <div class="meta-item">
+        <label>Model Type</label>
+        <span>3-Statement DCF</span>
+      </div>
+      <div class="meta-item">
+        <label>Data Source</label>
+        <span>SEC 10-K Filings</span>
+      </div>
+    </div>
+    <div class="author-badge">
+      <div class="initials">ML</div>
+      <div class="info">
+        <strong>Mariama Laryea</strong>
+        <small>Financial Analyst | MBA + MS Finance (in progress)</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="valuation-card">
+      <h3>Valuation Summary</h3>
+      <div class="val-row">
+        <span class="label">Market Price (at analysis)</span>
+        <span class="value cream">$189.00</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Intrinsic Value — Bear</span>
+        <span class="value" style="color:#F44336;">$168.00</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Intrinsic Value — Base</span>
+        <span class="value gold">$191.00</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Intrinsic Value — Bull</span>
+        <span class="value green">$214.00</span>
+      </div>
+      <div class="val-row">
+        <span class="label">WACC Range</span>
+        <span class="value cream">7% – 12%</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Terminal Growth Rate</span>
+        <span class="value cream">2% – 4%</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Services IRR (Projected)</span>
+        <span class="value green">14.2%</span>
+      </div>
+      <div class="val-row">
+        <span class="label">Free Cash Flow (FY2024)</span>
+        <span class="value cream">$99.6B</span>
+      </div>
+      <div class="buy-badge">★ Investment Rating: BUY</div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY ASSUMPTIONS -->
+<section style="background:rgba(201,168,76,0.04);">
+  <h2>Model Assumptions</h2>
+  <div class="grid-3">
+    <div class="assumption-card">
+      <div class="num">5yr</div>
+      <div class="title">Projection Horizon</div>
+      <p>FY2019–FY2024 historical data used to build FY2025–FY2029 forward projections across 3 scenarios.</p>
+    </div>
+    <div class="assumption-card">
+      <div class="num">9.5%</div>
+      <div class="title">Base Case WACC</div>
+      <p>Weighted Average Cost of Capital derived from CAPM, Apple's capital structure, and current risk-free rate.</p>
+    </div>
+    <div class="assumption-card">
+      <div class="num">3.0%</div>
+      <div class="title">Terminal Growth Rate</div>
+      <p>Conservative base-case terminal growth rate reflecting long-run GDP growth and Services segment expansion.</p>
+    </div>
+    <div class="assumption-card">
+      <div class="num">73%</div>
+      <div class="title">Services Gross Margin</div>
+      <p>Apple's Services segment (App Store, iCloud, Apple Pay) carries a 73% gross margin — the primary value driver in the bull thesis.</p>
+    </div>
+    <div class="assumption-card">
+      <div class="num">$110B</div>
+      <div class="title">Annual R&amp;D + CapEx</div>
+      <p>NPV, IRR, and payback period applied to Apple's annual R&amp;D and CapEx program — 14.2% IRR on Services expansion.</p>
+      </div>
+    <div class="assumption-card">
+      <div class="num">52%</div>
+      <div class="title">iPhone Revenue Share</div>
+      <p>Despite declining share, iPhone remains the ecosystem entry point. Services monetization per device assumed to grow 12% YoY.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCENARIO ANALYSIS -->
+<section>
+  <h2>Scenario Analysis</h2>
+  <div class="scenario-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>WACC</th>
+          <th>Terminal Growth</th>
+          <th>Revenue CAGR</th>
+          <th>Intrinsic Value</th>
+          <th>vs. Market ($189)</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag-bull">Bull</span></td>
+          <td>7.0%</td>
+          <td>4.0%</td>
+          <td>+9.2%</td>
+          <td style="color:#4CAF50;font-weight:600;">$214</td>
+          <td style="color:#4CAF50;">+13.2% upside</td>
+          <td>Strong Buy</td>
+        </tr>
+        <tr class="highlight">
+          <td><span class="tag-base">Base</span></td>
+          <td>9.5%</td>
+          <td>3.0%</td>
+          <td>+6.8%</td>
+          <td style="color:var(--gold);font-weight:600;">$191</td>
+          <td style="color:var(--gold);">+1.1% upside</td>
+          <td>Buy</td>
+        </tr>
+        <tr>
+          <td><span class="tag-bear">Bear</span></td>
+          <td>12.0%</td>
+          <td>2.0%</td>
+          <td>+2.1%</td>
+          <td style="color:#F44336;font-weight:600;">$168</td>
+          <td style="color:#F44336;">-11.1% downside</td>
+          <td>Hold</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SEGMENT BREAKDOWN -->
+<section style="background:rgba(201,168,76,0.04);">
+  <h2>Revenue Segment Breakdown</h2>
+  <p style="color:#888;font-size:14px;margin-bottom:40px;">FY2024 revenue of $391B across Apple's five product and service segments, with gross margin benchmarks.</p>
+  <div class="segment-bars">
+    <div class="seg-row">
+      <div class="seg-label">iPhone</div>
+      <div class="seg-bar-wrap"><div class="seg-bar" style="width:52%"></div></div>
+      <div class="seg-pct">52%</div>
+      <div class="seg-margin">38% GM</div>
+    </div>
+    <div class="seg-row">
+      <div class="seg-label">Services</div>
+      <div class="seg-bar-wrap"><div class="seg-bar" style="width:22%"></div></div>
+      <div class="seg-pct">22%</div>
+      <div class="seg-margin" style="color:#4CAF50;">73% GM</div>
+    </div>
+    <div class="seg-row">
+      <div class="seg-label">Mac</div>
+      <div class="seg-bar-wrap"><div class="seg-bar" style="width:10%"></div></div>
+      <div class="seg-pct">10%</div>
+      <div class="seg-margin">35% GM</div>
+    </div>
+    <div class="seg-row">
+      <div class="seg-label">Wearables</div>
+      <div class="seg-bar-wrap"><div class="seg-bar" style="width:9%"></div></div>
+      <div class="seg-pct">9%</div>
+      <div class="seg-margin">33% GM</div>
+    </div>
+    <div class="seg-row">
+      <div class="seg-label">iPad</div>
+      <div class="seg-bar-wrap"><div class="seg-bar" style="width:7%"></div></div>
+      <div class="seg-pct">7%</div>
+      <div class="seg-margin">32% GM</div>
+    </div>
+  </div>
+</section>
+
+<!-- PEER BENCHMARKING -->
+<section>
+  <h2>Peer Benchmarking</h2>
+  <p style="color:#888;font-size:14px;margin-bottom:40px;">AAPL vs. MSFT and GOOGL across 8 financial KPIs used to determine relative valuation and competitive positioning.</p>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="metric">28.4x</div>
+      <div class="metric-label">P/E Ratio</div>
+      <div class="companies">AAPL | MSFT: 34.1x | GOOGL: 22.8x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">21.2x</div>
+      <div class="metric-label">EV/EBITDA</div>
+      <div class="companies">AAPL | MSFT: 25.6x | GOOGL: 17.3x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">147%</div>
+      <div class="metric-label">Return on Equity</div>
+      <div class="companies">AAPL | MSFT: 38% | GOOGL: 29%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">29.6%</div>
+      <div class="metric-label">ROIC</div>
+      <div class="companies">AAPL | MSFT: 24.1% | GOOGL: 18.4%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">5.8%</div>
+      <div class="metric-label">FCF Yield</div>
+      <div class="companies">AAPL | MSFT: 2.9% | GOOGL: 4.1%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">46.2%</div>
+      <div class="metric-label">Gross Margin</div>
+      <div class="companies">AAPL | MSFT: 69.4% | GOOGL: 55.3%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">+6.8%</div>
+      <div class="metric-label">5yr Revenue CAGR</div>
+      <div class="companies">AAPL | MSFT: +14.2% | GOOGL: +11.8%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="metric">1.73x</div>
+      <div class="metric-label">Debt/Equity Ratio</div>
+      <div class="companies">AAPL | MSFT: 0.41x | GOOGL: 0.06x</div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section style="background:rgba(201,168,76,0.04);">
+  <h2>Methodology</h2>
+  <div class="method-grid">
+    <div class="method-step">
+      <div class="step-num">1</div>
+      <div>
+        <h4>Historical Data Collection</h4>
+        <p>Extracted 5-year financials from Apple's 10-K SEC filings (FY2019–FY2024) — Income Statement, Balance Sheet, and Cash Flow Statement.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="step-num">2</div>
+      <div>
+        <h4>3-Statement Model Build</h4>
+        <p>Built fully integrated 3-statement model in Excel with dynamic drivers — revenue growth, margin assumptions, working capital, and CapEx schedules.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="step-num">3</div>
+      <div>
+        <h4>DCF Valuation</h4>
+        <p>Projected 5-year free cash flows, calculated terminal value using Gordon Growth Model, and discounted at WACC to derive enterprise and equity value.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="step-num">4</div>
+      <div>
+        <h4>Sensitivity Analysis</h4>
+        <p>Built a two-variable sensitivity table across WACC (7%–12%) and terminal growth rate (2%–4%) to stress-test the base case valuation.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="step-num">5</div>
+      <div>
+        <h4>Segment &amp; Peer Analysis</h4>
+        <p>Disaggregated revenue and margin by segment; benchmarked across MSFT and GOOGL on 8 financial KPIs to triangulate valuation.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="step-num">6</div>
+      <div>
+        <h4>Investment Recommendation</h4>
+        <p>Synthesized DCF output, peer comps, and segment thesis into a BUY recommendation presented to faculty investment committee at Goldey-Beacom College.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Mariama Laryea — Financial Modeling Portfolio</p>
+  <div style="display:flex;gap:24px;">
+    <a href="ml-fpa-dashboard.html">FP&A Dashboard →</a>
+    <a href="ml-forecast-model.html">Forecast Model →</a>
+    <a href="mailto:mariamalaryea452@gmail.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
